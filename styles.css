@@ -1,0 +1,75 @@
+body,
+html {
+    height: 100%;
+    margin: 0;
+    background-color: black;
+}
+
+.image-tiles-container {
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-tiles {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    position: absolute;
+    width: 100%;
+}
+
+.image-tile {
+    max-width: calc(17% - 16px);
+    transition: transform 0.3s ease;
+    position: absolute;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('images/overlay.png');
+    opacity: 0.5;
+}
+
+.text-overlay {
+    text-align: center;
+    font-size: 24px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+    background-image: linear-gradient(to right, #5b0cb1, #5effff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+
+/* Additional styles for demonstration purposes */
+.content-above,
+.content-below {
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+}
+
+.content-above {
+    background-image: linear-gradient(to right, #5b0cb1, #5effff);
+}
+
+.content-below {
+    background-image: linear-gradient(to right, #5b0cb1, #5effff);
+}
