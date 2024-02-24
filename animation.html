@@ -9,24 +9,36 @@
         body,
         html {
             height: 100%;
-            /* Hide horizontal scroll */
+            margin: 0;
             background-color: black;
+            color: white;
+            /* Added for better visibility */
+        }
+
+        .image-tiles-container {
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .image-tiles {
             display: flex;
-            /* justify-content: space-between; */
+            justify-content: center;
+            align-items: center;
             height: 100%;
             box-sizing: border-box;
-            /* Include padding in the height calculation */
+            overflow: hidden;
+            position: absolute;
+            width: 100%;
         }
 
-        .image-tiles img {
+        .image-tile {
             max-width: calc(17% - 16px);
-            /* Set maximum width for each image tile */
-            /* Reduce margin between image tiles */
             transition: transform 0.3s ease;
-            /* Add smooth transition effect */
+            position: absolute;
         }
 
         .overlay {
@@ -36,23 +48,70 @@
             width: 100%;
             height: 100%;
             background-image: url('images/overlay.png');
+            opacity: 0.5; 
+        }
+
+        .text-overlay {
+            text-align: center;
+            font-size: 24px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 999;
+            background-image: linear-gradient(to right, #5b0cb1, #5effff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+
+        /* Additional styles for demonstration purposes */
+        .content-above,
+        .content-below {
+            height: 80vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+        }
+
+        .content-above {
+            background-image: linear-gradient(to right, #5b0cb1, #5effff);
+        }
+
+        .content-below {
+            background-image: linear-gradient(to right, #5b0cb1, #5effff);
         }
     </style>
 </head>
 
 <body>
+    <div class="content-above">
+        <p>This is content above the image tiles</p>
+    </div>
+
     <div class="overlay"></div>
 
-    <div class="image-tiles">
-        <!-- Your image tiles HTML goes here -->
-        <img src="images/line 1.svg" alt="Image 1">
-        <img src="images/line 2.svg" alt="Image 2">
-        <img src="images/line 3.svg" alt="Image 3">
-        <img src="images/line 4.svg" alt="Image 4">
-        <img src="images/line 5.svg" alt="Image 5">
-        <img src="images/line 6.svg" alt="Image 6">
-        <img src="images/line 7.svg" alt="Image 7">
-        <img src="images/line 8.svg" alt="Image 8">
+    <div class="image-tiles-container">
+        <div class="text-overlay">
+            <h2>Be inspired</h2>
+            <h1>Your ideas, our tools</h1>
+        </div>
+        <div class="image-tiles">
+            <div class="image-tile" style="left: -22%;"><img src="images/line 1.svg" alt="Image 1"></div>
+            <div class="image-tile" style="left: -4%;"><img src="images/line 2.svg" alt="Image 2"></div>
+            <div class="image-tile" style="left: 14%;"><img src="images/line 3.svg" alt="Image 3"></div>
+            <div class="image-tile" style="left: 32%;"><img src="images/line 4.svg" alt="Image 4"></div>
+            <div class="image-tile" style="left: 50%;"><img src="images/line 5.svg" alt="Image 5"></div>
+            <div class="image-tile" style="left: 68%;"><img src="images/line 6.svg" alt="Image 6"></div>
+            <div class="image-tile" style="left: 86%;"><img src="images/line 7.svg" alt="Image 7"></div>
+            <div class="image-tile" style="left: 104%;"><img src="images/line 8.svg" alt="Image 8"></div>
+        </div>
+    </div>
+
+    <div class="content-below">
+        <p>This is content below the image tiles</p>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
@@ -62,17 +121,52 @@
         // Initialize ScrollMagic controller
         var controller = new ScrollMagic.Controller();
 
-        // Define the tween for image tiles movement
-        var tween = gsap.to(".image-tiles", { y: "+=100", ease: "none" }); // Adjust y value as per your requirement
+        // Define animations for each image tile
+        var imageTiles = document.querySelectorAll('.image-tile');
+        var offset = 50; // Offset for smooth animation
+        var movementDistance = 150; // Adjust movement distance
 
-        // Create scene and set trigger hook for animation
-        var scene = new ScrollMagic.Scene({
-            triggerElement: ".overlay",
-            duration: "100%", // Adjust duration as per your requirement
-            triggerHook: 0,
-        })
-            .setTween(tween)
-            .addTo(controller);
+        imageTiles.forEach(function (tile, index) {
+            var movement = index % 2 === 0 ? "+" + movementDistance + "px" : "-" + movementDistance + "px";
+
+            var tween = gsap.to(tile, {
+                y: movement,
+                ease: "none"
+            });
+
+            // Create scene and set trigger hook for animation
+            var scene = new ScrollMagic.Scene({
+                triggerElement: ".overlay",
+                duration: "300%", // Adjust duration as per your requirement
+                triggerHook: 0,
+                offset: offset * index // Adjust offset for smooth animation
+            })
+                .setTween(tween)
+                .addTo(controller);
+        });
+
+        // Define reverse animations for each image tile when scrolling back up
+        var reverseImageTiles = document.querySelectorAll('.image-tile');
+        var reverseOffset = 50; // Offset for smooth animation
+
+        reverseImageTiles.forEach(function (tile, index) {
+            var movement = index % 2 === 0 ? "-" + movementDistance + "px" : "+" + movementDistance + "px";
+
+            var reverseTween = gsap.to(tile, {
+                y: movement,
+                ease: "none"
+            });
+
+            // Create scene and set trigger hook for reverse animation
+            var reverseScene = new ScrollMagic.Scene({
+                triggerElement: ".overlay",
+                duration: "300%", // Adjust duration as per your requirement
+                triggerHook: 1,
+                offset: reverseOffset * index // Adjust offset for smooth animation
+            })
+                .setTween(reverseTween)
+                .addTo(controller);
+        });
     </script>
 </body>
 
